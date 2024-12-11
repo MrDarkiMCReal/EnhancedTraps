@@ -1,0 +1,11 @@
+name: EnhancedTraps
+version: '${project.version}'
+main: org.mrdarkimc.enhancedtraps.EnhancedTraps
+api-version: '1.20'
+softdepend:
+  - FastAsyncWorldEdit
+  - WorldEdit
+  - WorldGuard
+commands:
+  et:
+    usage: /et help

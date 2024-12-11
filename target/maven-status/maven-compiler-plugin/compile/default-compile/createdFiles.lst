@@ -1,0 +1,12 @@
+org\mrdarkimc\enhancedtraps\hooks\WGSchemLoader.class
+org\mrdarkimc\enhancedtraps\listeners\Listener.class
+org\mrdarkimc\enhancedtraps\hooks\WorldGuardHook$1.class
+org\mrdarkimc\enhancedtraps\LocationHandler.class
+org\mrdarkimc\enhancedtraps\hooks\WorldGuardHook.class
+org\mrdarkimc\enhancedtraps\hooks\BlockRemoval.class
+org\mrdarkimc\enhancedtraps\PlayerWrapper.class
+org\mrdarkimc\enhancedtraps\EnhancedTraps.class
+org\mrdarkimc\enhancedtraps\Commands.class
+org\mrdarkimc\enhancedtraps\traps\ThreeByThreeTrap.class
+org\mrdarkimc\enhancedtraps\traps\TrapHandler.class
+org\mrdarkimc\enhancedtraps\WrapperHandler.class
