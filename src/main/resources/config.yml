@@ -1,0 +1,35 @@
+general:
+  blockedWorlds:
+    - world
+    - peaceWorld
+trapItem:
+  id: NETHER_STAR
+  CMD: -1 #Custom Model Data -1, что бы не использовать
+  displayname: "Трапа"
+  lore:
+    - ''
+    - 'Создает ловушку 3х3'
+    - ''
+skins:
+  blockSkins:
+    blackstoneTrap: # - это название скина для трапы. оно должно совпадать с тем, что в папке со схемами, только без ".schem"
+      actions:
+        - [sound] PISTON EXTEND
+      contents:
+        - STONE
+        - GLASS
+  particleSkins:
+    blackstoneTrap: # может быть любое название, но если совпадает с названием в blockSkins то они будут работать вместе. (т.е один скин партикла привязан к определенной трапке)
+        particle_type: "SOUL_FIRE_FLAME"
+        amount: 10
+        speed: 0.03
+        offsetX: 0.1
+        offsetY: 0.3
+        offsetZ: 0.1
+    DonateParticleTrap:
+      particle_type: "HAPPY_VILLAGER"
+      amount: 10
+      speed: 0.03
+      offsetX: 0.1
+      offsetY: 0.3
+      offsetZ: 0.1

@@ -128,16 +128,7 @@ public class WorldGuardHook {
         double y = loc.getY();
         double z = loc.getZ();
 
-
-
-
-
-
-
         com.sk89q.worldedit.world.World adapted = BukkitAdapter.adapt(loc.getWorld());
-//        com.sk89q.worldedit.entity.Player adaptedPlayer = BukkitAdapter.adapt(player);
-//        SessionManager sessionManager = WorldEdit.getInstance().getSessionManager();
-//        LocalSession localSession = sessionManager.get(adaptedPlayer);
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(adapted)){
             BlockTypeMask mask = new BlockTypeMask(editSession, BlockTypes.CHEST,BlockTypes.SHULKER_BOX, BlockTypes.GLASS);
             Mask reversed = Masks.negate(mask);
