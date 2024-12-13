@@ -130,11 +130,14 @@ public class WorldGuardHook {
 
         com.sk89q.worldedit.world.World adapted = BukkitAdapter.adapt(loc.getWorld());
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(adapted)){
+
             BlockTypeMask mask = new BlockTypeMask(editSession, BlockTypes.CHEST,BlockTypes.SHULKER_BOX, BlockTypes.GLASS);
+            //BlockTypeMask mask2 = new BlockTypeMask(editSession,new BlockTypeExtended("minecraft:chest",player.getUniqueId()));
             Mask reversed = Masks.negate(mask);
+            //Mask reversed = Masks.negate(mask2);
             player.playSound(player.getLocation(), Sound.BLOCK_PISTON_EXTEND,1,1);
             //editSession.setMask(inverseMask);
-            editSession.setMask(reversed);
+            //editSession.setMask(reversed);
             Operation operation = new ClipboardHolder(clipboard)
                     .createPaste(editSession)
                     .to(BlockVector3.at(x, y, z))

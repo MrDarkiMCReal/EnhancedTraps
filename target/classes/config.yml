@@ -13,11 +13,8 @@ trapItem:
 skins:
   blockSkins:
     blackstoneTrap: # - это название скина для трапы. оно должно совпадать с тем, что в папке со схемами, только без ".schem"
-      trapActiveTime: 15
-      cooldown: 45
-      sound:
-        spawn: 'BLOCK_PISTON_EXTEND'
-        end: 'BLOCK_PISTON_EXTEND'
+      actions:
+        - [sound] PISTON EXTEND
       contents:
         - POLISHED_BLACKSTONE
         - POLISHED_BLACKSTONE_SLAB
@@ -42,7 +39,3 @@ skins:
       offsetX: 0.1
       offsetY: 0.3
       offsetZ: 0.1
-messages:
-  no-trap-found:
-    enable: true
-    message: "&7Не удалось опре"

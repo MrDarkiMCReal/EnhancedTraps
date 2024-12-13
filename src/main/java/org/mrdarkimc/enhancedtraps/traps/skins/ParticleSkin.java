@@ -1,4 +1,4 @@
-package org.mrdarkimc.enhancedtraps.traps;
+package org.mrdarkimc.enhancedtraps.traps.skins;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,9 +12,9 @@ public class ParticleSkin implements Skinable {
     double offsetX;
     double offsetY;
     double offsetZ;
-    int speed;
+    double speed;
 
-    public ParticleSkin(String name,Particle particleType, int amount, double offsetX, double offsetY, double offsetZ, int speed) {
+    public ParticleSkin(String name,Particle particleType, int amount, double offsetX, double offsetY, double offsetZ, double speed) {
         this.name = name;
         this.particleType = particleType;
         this.amount = amount;

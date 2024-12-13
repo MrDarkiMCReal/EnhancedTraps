@@ -5,6 +5,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import org.bukkit.Bukkit;
+import org.mrdarkimc.SatanicLib.objectManager.interfaces.Reloadable;
 import org.mrdarkimc.enhancedtraps.EnhancedTraps;
 
 import java.io.File;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WGSchemLoader {
+public class WGSchemLoader implements Reloadable {
     public WGSchemLoader() {
         loadSchematicsToCache();
     }
@@ -21,6 +22,7 @@ public class WGSchemLoader {
     public static File schemFolder = new File(EnhancedTraps.getInstance().getDataFolder() + "/schems/");
     public static Map<String, Clipboard> clipboardMap = new HashMap<>();
     public void loadSchematicsToCache(){
+        clipboardMap.clear();
         if (!schemFolder.exists()) {
             Bukkit.getLogger().warning("[TRAPS] Schems folder does not exist!");
             return;
@@ -48,5 +50,10 @@ public class WGSchemLoader {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public void reload() {
+        loadSchematicsToCache();
     }
 }
