@@ -97,8 +97,8 @@ public class Listener implements org.bukkit.event.Listener, Reloadable {
 
             if (event.getHand().equals(EquipmentSlot.HAND)) {
 
-                ItemStack stack = event.getItem();
-                if (stack!=null && !stack.getItemMeta().getPersistentDataContainer().has(TrapFactory.key, PersistentDataType.BOOLEAN))
+                ItemStack stack = event.getPlayer().getInventory().getItemInMainHand();
+                if (stack==null || !stack.getItemMeta().getPersistentDataContainer().has(TrapFactory.key, PersistentDataType.BOOLEAN))
                     return;
 
 
