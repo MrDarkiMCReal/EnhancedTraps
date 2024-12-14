@@ -1,18 +1,15 @@
 package org.mrdarkimc.enhancedtraps.commands;
 
-import com.sk89q.worldedit.world.block.BlockType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.enginehub.linbus.stream.token.LinToken;
+import org.mrdarkimc.SatanicLib.Utils;
 import org.mrdarkimc.SatanicLib.objectManager.interfaces.Reloadable;
 import org.mrdarkimc.enhancedtraps.EnhancedTraps;
-import org.mrdarkimc.enhancedtraps.hooks.WorldGuardHook;
-import org.mrdarkimc.enhancedtraps.traps.TrapFactory;
-import org.mrdarkimc.enhancedtraps.traps.skins.BlockSkinTrap;
 import org.mrdarkimc.enhancedtraps.wrappers.WrapperHandler;
 
 public class Commands implements CommandExecutor {
@@ -20,10 +17,20 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        if (!commandSender.hasPermission("enhancedtraps.admin.permission")){
+            return true;
+        }
         if (strings.length < 1) {
-            commandSender.sendMessage("MrDarkiMC's EnhancedTraps");
-            commandSender.sendMessage("Команды: ");
-            commandSender.sendMessage("/" + command.getName() + " help - справка");
+            commandSender.sendMessage(Utils.translateHex("   "));
+            commandSender.sendMessage(Utils.translateHex("                   &#D40092MrDarkiMC's EnhancedTraps"));
+            commandSender.sendMessage(Utils.translateHex("   "));
+            commandSender.sendMessage(Utils.translateHex("    &#D40092/" + command.getName() + " try&r&7 - заспавнить трапку"));
+            commandSender.sendMessage(Utils.translateHex("    &#D40092/" + command.getName() + " give ник кол-во&r&7 - дать трапку игроку"));
+            commandSender.sendMessage(Utils.translateHex("    &#D40092/" + command.getName() + " update&r&7 - обновить скины игроку"));
+            commandSender.sendMessage(Utils.translateHex("    &#D40092/" + command.getName() + " reload&r&7 - перезагрузить кэш"));
+            commandSender.sendMessage(Utils.translateHex("    &#D40092ET-canUseTrap&7 - флаг для WorldGuard"));
+            commandSender.sendMessage(Utils.translateHex("    &7После выдачи игроку прав, нужно вызвать /et update Ник"));
+            commandSender.sendMessage(Utils.translateHex("   "));
             return true;
         }
         switch (strings[0]) {
@@ -43,13 +50,21 @@ public class Commands implements CommandExecutor {
                     if (giveTo.isOnline()) {
                         ItemStack trap = EnhancedTraps.factory.getTrap(amount);
                         giveTo.getInventory().addItem(trap);
+                    }else {
+                        commandSender.sendMessage(ChatColor.RED + "[TRAPS] Игрок не найден");
                     }
+                    commandSender.sendMessage(ChatColor.YELLOW +  "[TRAPS] Трапка выдана игроку: " + giveTo.getName());
                     return true;
             case "reload": // /et give mrdarkimc 1
                 EnhancedTraps.config.reloadConfig();
                 Reloadable.reloadAll();
+                commandSender.sendMessage(ChatColor.YELLOW + "[TRAPS] Кэш конфига перезагружен");
                 return true;
-
+            case "update":
+                Player updateMe = Bukkit.getPlayer(strings[1]);
+                WrapperHandler.getWPlayer(updateMe).updateSkins();
+                commandSender.sendMessage(ChatColor.YELLOW + "[Traps] Скины на трапки/партиклы у игрока обновлены согласно его правам.");
+                return true;
         }
         return true;
     }

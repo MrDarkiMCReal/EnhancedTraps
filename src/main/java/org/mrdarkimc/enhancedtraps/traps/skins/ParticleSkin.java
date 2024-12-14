@@ -15,6 +15,10 @@ public class ParticleSkin implements Skinable {
     double speed;
 
     public ParticleSkin(String name,Particle particleType, int amount, double offsetX, double offsetY, double offsetZ, double speed) {
+
+        //todo использовать Particle.Trail
+
+
         this.name = name;
         this.particleType = particleType;
         this.amount = amount;
@@ -26,7 +30,7 @@ public class ParticleSkin implements Skinable {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
@@ -37,30 +41,9 @@ public class ParticleSkin implements Skinable {
     @Override
     public void spawn(Player player) {
         if (particleType == null){
-            player.sendMessage(ChatColor.RED + "[TRAPS] Не удалось определить партиклы");
             return;
         }
         Location loc = player.getLocation();
         loc.getWorld().spawnParticle(particleType,loc,amount,offsetX,offsetY,offsetZ,speed);
-    }
-    public static ParticleSkin getDefault(){
-        return new ParticleSkin("pluginDefault",null,0,0,0,0,0);
-    }
-    public static class EmptySkin implements Skinable{
-
-        @Override
-        public String getName() {
-            return "pluginDefault";
-        }
-
-        @Override
-        public Object getSkin() {
-            return this;
-        }
-
-        @Override
-        public void spawn(Player player) {
-
-        }
     }
 }

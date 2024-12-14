@@ -29,6 +29,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.mrdarkimc.SatanicLib.Utils;
 import org.mrdarkimc.enhancedtraps.EnhancedTraps;
+import org.mrdarkimc.enhancedtraps.traps.customEffects.MinecraftEffect;
+import org.mrdarkimc.enhancedtraps.traps.customEffects.IEffect;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -39,6 +41,8 @@ public class BlockSkinTrap implements Skinable {
     int cooldown;
     Sound soundSpawn;
     Sound soundEnd;
+    IEffect owner;
+    IEffect enemy;
     List<String> actions; //todo
     Clipboard clipboard;
     public static BlockType[] globalContents; // поле инициализируется в классе Deserealizer
@@ -47,12 +51,11 @@ public class BlockSkinTrap implements Skinable {
     public BlockSkinTrap(String name,Clipboard clipboard) {
         this.name = name;
         this.clipboard = clipboard;
-
         cooldown = EnhancedTraps.config.get().getInt("skins.blockSkins." + name + ".cooldown");
         soundSpawn = Sound.valueOf(EnhancedTraps.config.get().getString("skins.blockSkins." + name + ".sound.spawn").toUpperCase());
         soundEnd = Sound.valueOf(EnhancedTraps.config.get().getString("skins.blockSkins." + name + ".sound.end").toUpperCase());
         trapActiveTime = EnhancedTraps.config.get().getInt("skins.blockSkins." + name + ".trapActiveTime");
-        if (trapActiveTime <= cooldown){
+        if (trapActiveTime >= cooldown){
             Bukkit.getLogger().info(ChatColor.RED + "[TRAPS] Время действия должно быть меньше, чем КД");
             Bukkit.getLogger().info(ChatColor.RED + "[TRAPS] Устанавливаю новые значения на трапку: " + name);
             Bukkit.getLogger().info(ChatColor.RED + "[TRAPS] КД:" + 45);
@@ -60,6 +63,8 @@ public class BlockSkinTrap implements Skinable {
             trapActiveTime = 15;
             cooldown = 45;
         }
+        owner = new MinecraftEffect(name, IEffect.Target.owner);
+        enemy = new MinecraftEffect(name, IEffect.Target.enemy);
     }
     public int getCooldown() {
         return cooldown;
@@ -94,18 +99,30 @@ public class BlockSkinTrap implements Skinable {
         ProtectedRegion region = new ProtectedCuboidRegion(regionName,BlockVector3.at(minX,minY,minZ),BlockVector3.at(maxX,maxY,maxZ));
         Set<String> allowedCommands = new HashSet<>(); //blocked all commands except //todo
         region.setFlag(Flags.ALLOWED_CMDS, allowedCommands);
-        region.setFlag(Flags.BLOCK_BREAK, StateFlag.State.DENY);
-        region.setFlag(Flags.BLOCK_PLACE, StateFlag.State.DENY);
+        region.setFlag(Flags.BUILD, StateFlag.State.DENY);
+        //region.setFlag(Flags.BLOCK_PLACE, StateFlag.State.DENY);
         region.setFlag(Flags.PVP, StateFlag.State.ALLOW);
         region.setFlag(Flags.OTHER_EXPLOSION, StateFlag.State.DENY);
         region.setFlag(Flags.USE, StateFlag.State.ALLOW);
         region.setFlag(EnhancedTraps.CAN_USE_TRAP, StateFlag.State.DENY);
         manager.addRegion(region);
+        StringBuilder loc = new StringBuilder();
+        loc.append(location.getWorld().getName());
+        loc.append(" ");
+        loc.append(String.valueOf((int)x));
+        loc.append(" ");
+        loc.append(((int)y));
+        loc.append(" ");
+        loc.append(((int)z));
+
+        Bukkit.getLogger().warning("[TRAPS-LOG-CREATE] Делаю трапку: " + regionName);
+        Bukkit.getLogger().warning("[TRAPS-LOG-CREATE] Локация: " + loc.toString());
         new BukkitRunnable(){
 
             @Override
             public void run() {
                 manager.removeRegion(regionName);
+                Bukkit.getLogger().warning("[TRAPS-LOG-DELETE] Трапка удалена успешно: " + regionName);
             }
         }.runTaskLater(EnhancedTraps.getInstance(), trapActiveTime * 20L);
     }
@@ -148,15 +165,22 @@ public class BlockSkinTrap implements Skinable {
 
             BlockType[] type = Stream.concat(Arrays.stream(globalContents), this.getDefaultTrapSkins()).toArray(BlockType[]::new);
             BlockTypeMask mask = new BlockTypeMask(editSession, type);
-            for (BlockType blockType : type) {
-                player.sendMessage(blockType.toString());
-            }
             Mask reversed = Masks.negate(mask);
             player.getWorld().getNearbyEntities(player.getLocation(),10,10,10)
                     .stream()
                     .filter(e -> e instanceof Player)
                     .map(e -> (Player)e)
                     .forEach(p -> p.playSound(player.getLocation(), soundSpawn,1,1));
+            player.getWorld().getNearbyEntities(player.getLocation(),1.5,1.5,1.5)
+                    .stream()
+                    .filter(e -> e instanceof Player)
+                    .map(e -> (Player)e)
+                    .forEach(p -> {
+                        if (!p.equals(player)){
+                            enemy.applyEffectTo(p);
+                        }
+                    });
+            owner.applyEffectTo(player);
             editSession.setMask(reversed);
             Operation operation = new ClipboardHolder(clipboard)
                     .createPaste(editSession)
@@ -197,9 +221,6 @@ public class BlockSkinTrap implements Skinable {
         double maxZ = z+2;
         com.sk89q.worldedit.world.World world = BukkitAdapter.adapt(loc.getWorld());
         return new CuboidRegion(world,BlockVector3.at(minX,minY,minZ), BlockVector3.at(maxX,maxY,maxZ));
-    }
-    public static BlockSkinTrap getDefault(){
-        return new BlockSkinTrap("pluginDefault",null);
     }
 
 }

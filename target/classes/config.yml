@@ -1,11 +1,13 @@
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
+# список эффектов(бафф/дебафф)
 general:
   blockedWorlds:
-    - world2
+    - world
     - peaceWorld
 trapItem:
   id: NETHER_STAR
   CMD: -1 #Custom Model Data -1, что бы не использовать
-  displayname: "#&DDD2B6Боевая коробка"
+  displayname: "&#DDD2B6Боевая коробка"
   lore:
     - ''
     - '&eСоздает куб &73х3'
@@ -13,9 +15,20 @@ trapItem:
 skins:
   blockSkins:
     blackstoneTrap: # - это название скина для трапы. оно должно совпадать с тем, что в папке со схемами, только без ".schem"
-      actions:
-        - [sound] PISTON EXTEND
-      contents:
+      trapActiveTime: 15
+      cooldown: 45
+      custom-effects: #То, что я заготовил тут является слишком имбой, если игрок ставит трапку на врага, то враг его не пробьет никак
+        #но есть и плюсы, игроки без топ-шмота смогут убить игрока в топ шмотках
+        owner:
+          - strength:15:0 #сила на 15 секунд с уровнем 1 (0+1)
+        enemy:
+          - blindness:15:1 #Слепота на 15 секунд с уровнем 2(1+1)
+          - weakness:15:0 #Слабость на 15 секунд с уровнем 1(0+1)
+      sound:
+        spawn: 'BLOCK_PISTON_EXTEND'
+        end: 'BLOCK_PISTON_EXTEND'
+      contents: #это то, из чего состоит трапка. у каждого скина должно быть это поле, хотябы с 1м блоком, но лучше со всеми, что бы исключить коллизию, если трапки поставлены командой /et try
+        #Так же, если нужно что то добавить в черный список, можно добавить в любую графу contents. И тогда каждая трапка будет игнорировать этот блок
         - POLISHED_BLACKSTONE
         - POLISHED_BLACKSTONE_SLAB
         - POLISHED_BLACKSTONE_STAIRS
@@ -24,18 +37,42 @@ skins:
         - CHISELED_POLISHED_BLACKSTONE
         - SHROOMLIGHT
         - WHITE_STAINED_GLASS
+    glassTrap: # - это название скина для трапы. оно должно совпадать с тем, что в папке со схемами, только без ".schem"
+      trapActiveTime: 15
+      cooldown: 45
+      sound:
+        spawn: 'BLOCK_PISTON_EXTEND'
+        end: 'BLOCK_PISTON_EXTEND'
+      contents:
+        - GLASS
   particleSkins:
     blackstoneTrap: # может быть любое название, но если совпадает с названием в blockSkins то они будут работать вместе. (т.е один скин партикла привязан к определенной трапке)
-        particle_type: "SOUL_FIRE_FLAME"
-        amount: 10
-        speed: 0.03
-        offsetX: 0.1
-        offsetY: 0.3
-        offsetZ: 0.1
+      particle_type: "SOUL_FIRE_FLAME"
+      amount: 150
+      speed: 0.02
+      offsetX: 2
+      offsetY: 2
+      offsetZ: 2
     DonateParticleTrap:
-      particle_type: "HAPPY_VILLAGER"
-      amount: 10
-      speed: 0.03
-      offsetX: 0.1
-      offsetY: 0.3
-      offsetZ: 0.1
+      particle_type: "VILLAGER_HAPPY"
+      amount: 200
+      speed: 0.2
+      offsetX: 3
+      offsetY: 3
+      offsetZ: 3
+messages:
+  no-trap-found:
+    enable: true
+    message: "&7Не удалось определить скин на трапку"
+  no-particle-found:
+    enable: true
+    message: "&7Не удалось определить партиклы"
+  cooldown:
+    enable: true
+    message: "&7Трапка перезаряжается. Еще: {time}"
+  cant-Use-Trap-Here:
+    enable: true
+    message: "&7Нельзя поставить трапку рядом с другой трапкой"
+  cant-Use-Trap-World:
+    enable: true
+    message: "&7В этом мире можно ставить трапку только в определенных местах."

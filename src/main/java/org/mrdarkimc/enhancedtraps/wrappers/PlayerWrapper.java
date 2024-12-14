@@ -14,8 +14,8 @@ import java.util.Map;
 public class PlayerWrapper implements Reloadable {
 
     Player player;
-    BlockSkinTrap trapSkin = BlockSkinTrap.getDefault();
-    ParticleSkin particleSkin = ParticleSkin.getDefault();
+    BlockSkinTrap trapSkin = null;
+    ParticleSkin particleSkin = null;
     public Player getPlayer(){
         return player;
     }
@@ -26,6 +26,8 @@ public class PlayerWrapper implements Reloadable {
         updateSkins();
     }
     public void useTrap(){
+        if (trapSkin == null)
+            return;
         ItemStack stack = player.getInventory().getItemInMainHand();
         CooldownHandler.setCooldown(player, trapSkin.getCooldown());
         stack.setAmount(stack.getAmount()-1);
@@ -43,12 +45,14 @@ public class PlayerWrapper implements Reloadable {
     }
     public void calculateParticleSkin(){
         for (Map.Entry<String, ParticleSkin> trap : SkinHandler.particleList.entrySet()) {
+
             String particlename = trap.getKey();
             if (player.hasPermission("enhancedtraps." + particlename)){
                 particleSkin = trap.getValue();
                 return;
             }
         }
+            particleSkin = new ParticleSkin("empty",null,0,0,0,0,0);
     }
     public void updateSkins(){
         calculateParticleSkin();

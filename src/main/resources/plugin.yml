@@ -1,11 +1,15 @@
 name: EnhancedTraps
 version: '${project.version}'
 main: org.mrdarkimc.enhancedtraps.EnhancedTraps
+author: MrDarkiMC
+website: https://t.me/doomgxard
 api-version: '1.20'
 softdepend:
   - FastAsyncWorldEdit
   - WorldEdit
   - WorldGuard
 commands:
-  et:
+  enhancedtraps:
+    aliases:
+      - et
     usage: /et help

@@ -13,7 +13,7 @@ public class SkinHandler {
 //        public BlockSkinTrap trap;
 //        public List<BlockType> contents;
 //    }
-    public static Map<String, BlockSkinTrap> trapList = new HashMap<>();
+    public static Map<String, BlockSkinTrap> trapList = new HashMap<>(); //эта мапа без .schem
     public static Map<String, ParticleSkin> particleList = new HashMap<>();
     public static void add(Skinable s){
         if (s instanceof BlockSkinTrap)
