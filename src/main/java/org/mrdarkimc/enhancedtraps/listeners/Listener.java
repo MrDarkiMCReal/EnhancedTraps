@@ -59,7 +59,14 @@ public class Listener implements org.bukkit.event.Listener, Reloadable {
             canPlace = false;
             for (ProtectedRegion applicableRegion : manager.getApplicableRegions(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ()))) {
                 StateFlag.State flagState = applicableRegion.getFlag(EnhancedTraps.CAN_USE_TRAP);
-                if (flagState.equals(StateFlag.State.ALLOW)) {
+                if (flagState == null){
+                continue;
+                }
+                if (flagState == StateFlag.State.DENY){
+                    canPlace = false;
+                    break;
+                }
+                if (flagState==StateFlag.State.ALLOW) {
                     canPlace = true;
                     break;
                 }
@@ -78,7 +85,7 @@ public class Listener implements org.bukkit.event.Listener, Reloadable {
                 canPlace = false;
                 break;
             }
-            if (flagState.equals(StateFlag.State.ALLOW) || flagState == null) {
+            if (flagState == null || flagState.equals(StateFlag.State.ALLOW)) {
                 return true;
             }
 

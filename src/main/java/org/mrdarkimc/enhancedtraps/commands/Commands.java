@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.mrdarkimc.SatanicLib.Utils;
 import org.mrdarkimc.SatanicLib.objectManager.interfaces.Reloadable;
 import org.mrdarkimc.enhancedtraps.EnhancedTraps;
@@ -61,9 +62,17 @@ public class Commands implements CommandExecutor {
                 commandSender.sendMessage(ChatColor.YELLOW + "[TRAPS] Кэш конфига перезагружен");
                 return true;
             case "update":
-                Player updateMe = Bukkit.getPlayer(strings[1]);
-                WrapperHandler.getWPlayer(updateMe).updateSkins();
-                commandSender.sendMessage(ChatColor.YELLOW + "[Traps] Скины на трапки/партиклы у игрока обновлены согласно его правам.");
+                commandSender.sendMessage(ChatColor.YELLOW + "[Traps] Начинаю процесс обновления трапок. Старт через: 2 сек.");
+                new BukkitRunnable(){
+
+                    @Override
+                    public void run() {
+                        Player updateMe = Bukkit.getPlayer(strings[1]);
+                        WrapperHandler.getWPlayer(updateMe).updateSkins();
+                    }
+                }.runTaskLater(EnhancedTraps.getInstance(),40);
+
+                commandSender.sendMessage(ChatColor.YELLOW + "[Traps] Готово! Скины на трапки/партиклы у игрока обновлены согласно его правам.");
                 return true;
         }
         return true;

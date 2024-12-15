@@ -104,6 +104,7 @@ public class BlockSkinTrap implements Skinable {
         region.setFlag(Flags.PVP, StateFlag.State.ALLOW);
         region.setFlag(Flags.OTHER_EXPLOSION, StateFlag.State.DENY);
         region.setFlag(Flags.USE, StateFlag.State.ALLOW);
+        region.setPriority(10);
         region.setFlag(EnhancedTraps.CAN_USE_TRAP, StateFlag.State.DENY);
         manager.addRegion(region);
         StringBuilder loc = new StringBuilder();
